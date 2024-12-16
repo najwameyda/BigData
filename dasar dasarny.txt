@@ -1,0 +1,147 @@
+1. Dasar-Dasar SQL
+SELECT: Digunakan untuk memilih data dari tabel.
+SELECT * FROM Tabel_Mahasiswa;  -- Menampilkan semua kolom dan baris
+SELECT ID_Mahasiswa, Nama_Mahasiswa FROM Tabel_Mahasiswa;  -- Menampilkan kolom spesifik
+
+WHERE: Digunakan untuk menyaring data berdasarkan kondisi tertentu.
+SELECT * FROM Tabel_Mahasiswa WHERE Kelas_Mahasiswa = '1';  -- Menampilkan data berdasarkan kondisi
+
+ORDER BY: Digunakan untuk mengurutkan data.
+SELECT * FROM Tabel_Mahasiswa ORDER BY Nama_Mahasiswa ASC;  -- Mengurutkan secara ascending
+SELECT * FROM Tabel_Mahasiswa ORDER BY Nama_Mahasiswa DESC;  -- Mengurutkan secara descending
+
+INSERT: Digunakan untuk menambahkan data baru ke dalam tabel.
+INSERT INTO Tabel_Mahasiswa (NIM, Nama_Mahasiswa, Kelas_Mahasiswa) VALUES ('123456', 'Budi Santoso', '1');
+
+UPDATE: Digunakan untuk memperbarui data yang sudah ada.
+UPDATE Tabel_Mahasiswa SET Nama_Mahasiswa = 'Budi Santoso', Kelas_Mahasiswa = '2' WHERE NIM = '123456';
+
+DELETE: Digunakan untuk menghapus data dari tabel.
+DELETE FROM Tabel_Mahasiswa WHERE NIM = '123456';
+
+2. Fungsi Agregat dan Kelompok
+SELECT COUNT(*) AS Jumlah_Mahasiswa FROM Tabel_Mahasiswa WHERE Kelas_Mahasiswa = '1';
+
+SUM: Menghitung jumlah total dari sebuah kolom numerik.
+SELECT SUM(Nilai) AS Total_Nilai FROM Tabel_Nilai WHERE Kelas_Mahasiswa = '1';
+
+AVG: Menghitung rata-rata nilai dari sebuah kolom numerik.
+SELECT AVG(Nilai) AS Rata_Rata_Nilai FROM Tabel_Nilai WHERE Kelas_Mahasiswa = '1';
+
+MIN dan MAX: Menemukan nilai minimum dan maksimum.
+SELECT MIN(Nilai) AS Nilai_Minimum, MAX(Nilai) AS Nilai_Maksimum FROM Tabel_Nilai WHERE Kelas_Mahasiswa = '1';
+
+GROUP BY: Mengelompokkan data berdasarkan satu atau lebih kolom.
+SELECT Kelas_Mahasiswa, COUNT(*) AS Jumlah_Mahasiswa FROM Tabel_Mahasiswa GROUP BY Kelas_Mahasiswa;
+
+
+3. Join dan Subquery
+JOIN: Menggabungkan data dari dua atau lebih tabel.
+SELECT m.ID_Mahasiswa, m.NIM, m.Nama_Mahasiswa, n.Nilai 
+FROM Tabel_Mahasiswa m 
+JOIN Tabel_Nilai n ON m.ID_Mahasiswa = n.ID_Mahasiswa 
+WHERE m.Kelas_Mahasiswa = '1';
+
+LEFT JOIN, RIGHT JOIN, dan FULL JOIN: Jenis-jenis join lainnya untuk kebutuhan spesifik.
+SELECT m.ID_Mahasiswa, m.NIM, n.Nilai 
+FROM Tabel_Mahasiswa m 
+LEFT JOIN Tabel_Nilai n ON m.ID_Mahasiswa = n.ID_Mahasiswa;
+
+Subquery: Query di dalam query.
+SELECT * FROM Tabel_Mahasiswa 
+WHERE ID_Mahasiswa IN (SELECT ID_Mahasiswa FROM Tabel_Nilai WHERE Nilai > 80);
+
+
+4. Pengaturan Tampilan Data
+OFFSET dan FETCH: Mengambil sejumlah baris dari posisi tertentu.
+SELECT * FROM Tabel_Mahasiswa
+ORDER BY ID_Mahasiswa
+OFFSET 100 ROWS FETCH NEXT 100 ROWS ONLY;  -- Menampilkan baris 101-200
+
+
+TOP: Mengambil sejumlah baris teratas.
+SELECT TOP 10 * FROM Tabel_Mahasiswa;  -- Menampilkan 10 baris pertama
+
+
+
+5. Membuat dan Menghapus Objek
+CREATE TABLE Tabel_Mahasiswa (
+    ID_Mahasiswa INT PRIMARY KEY,
+    NIM NVARCHAR(50),
+    Nama_Mahasiswa NVARCHAR(100),
+    Kelas_Mahasiswa NVARCHAR(50)
+);
+
+
+ALTER TABLE: Mengubah struktur tabel yang sudah ada.
+ALTER TABLE Tabel_Mahasiswa ADD Tanggal_Lahir DATE;  -- Menambahkan kolom baru
+
+
+DROP TABLE: Menghapus tabel.
+DROP TABLE Tabel_Mahasiswa;
+
+=============================
+cara liat tabel mahasiswa
+SELECT TOP 10 * FROM Tabel_Mahasiswa;
+
+anjay liat data mahasiswa dri kelas 1 begimane,
+SELECT * FROM Tabel_Mahasiswa WHERE Kelas_Mahasiswa = 'Kelas_1';
+
+
+mat,bro klo mau nambahin id mata kuliahnya gimana deh di ini 
+SELECT * FROM Tabel_Mahasiswa WHERE Kelas_Mahasiswa = 'Kelas_9';
+
+
+pake ini ya
+SELECT 
+    m.ID_Mahasiswa,
+    m.NIM,
+    m.Nama_Mahasiswa,
+    m.Kelas_Mahasiswa,
+    n.ID_MataKuliah,
+    mk.Nama_MataKuliah
+FROM 
+    Tabel_Mahasiswa m
+JOIN 
+    Tabel_Nilai n ON m.ID_Mahasiswa = n.ID_Mahasiswa
+JOIN 
+    Tabel_MataKuliah mk ON n.ID_MataKuliah = mk.ID_MataKuliah
+WHERE 
+    m.Kelas_Mahasiswa = 'Kelas_9';
+===========================
+terus gw cuma mau liat 10 mahasiswa aj dr kelas 9 gimana?
+
+SELECT TOP 10 
+    m.ID_Mahasiswa,
+    m.NIM,
+    m.Nama_Mahasiswa,
+    m.Kelas_Mahasiswa,
+    n.ID_MataKuliah,
+    mk.Nama_MataKuliah
+FROM 
+    Tabel_Mahasiswa m
+JOIN 
+    Tabel_Nilai n ON m.ID_Mahasiswa = n.ID_Mahasiswa
+JOIN 
+    Tabel_MataKuliah mk ON n.ID_MataKuliah = mk.ID_MataKuliah
+WHERE 
+    m.Kelas_Mahasiswa = 'Kelas_9';
+
+
+
+=============
+CARA LIAT NILAI MAHASISWA DY ATAS 70 TPI CUMA BBRP DOANG BY TOP
+SELECT TOP 3 * FROM Tabel_Mahasiswa 
+WHERE ID_Mahasiswa IN (SELECT ID_Mahasiswa FROM Tabel_Nilai WHERE Nilai > 70);
+
+========================
+cara update nama yagknya
+SELECT * FROM Tabel_Mahasiswa WHERE Kelas_Mahasiswa = 'Kelas_1';
+UPDATE Tabel_Mahasiswa
+SET Nama_Mahasiswa = 'Nama Baru'
+WHERE NIM = '123456';
+	
+
+=======
+ngapus brey dri ssms
+DELETE FROM Tabel_Mahasiswa WHERE NIM = 'NIM000302';
